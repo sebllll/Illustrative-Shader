@@ -52,8 +52,15 @@
     <Reference Include="System">
       <Private>False</Private>
     </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GameComponents\Camera.cs" />
+    <Compile Include="GameComponents\InputManager.cs" />
+    <Compile Include="Helpers\ServiceHelper.cs" />
+    <Compile Include="Interfaces\ICameraService.cs" />
+    <Compile Include="Interfaces\IInputManagerService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Game1.cs" />

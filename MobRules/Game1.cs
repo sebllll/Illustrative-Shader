@@ -8,6 +8,9 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Net;
 using Microsoft.Xna.Framework.Storage;
+using MobRules.GameComponents;
+using MobRules.Helpers;
+using MobRules.Interfaces;
 
 namespace MobRules
 {
@@ -19,10 +22,39 @@ namespace MobRules
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
+        // Game Components and Mangers
+        InputManager inputManager = null;
+        Camera camera = null;
+
+        // Testing code
+        Model asteroid;
+        float planetsize = 0.01f;
+        Vector3[] block;
+        int numblocks;
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+
+            ServiceHelper.Game = this;
+        }
+
+        // Testing Code
+        void InitializeField()
+        {
+            numblocks = 400;
+            block = new Vector3[numblocks];
+
+            Random r = new Random();
+
+            for (int i = 0; i < numblocks; i++)
+            {
+                block[i].X = 500 - (float)r.NextDouble() * 1000;
+                block[i].Y = 500 - (float)r.NextDouble() * 1000;
+                block[i].Z = 500 - (float)r.NextDouble() * 1000;
+
+            }
         }
 
         /// <summary>
@@ -33,7 +65,16 @@ namespace MobRules
         /// </summary>
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
+            // Start and add Game Services/Components
+            inputManager = new InputManager(this);
+            ServiceHelper.Add<IInputManagerService>(inputManager);
+            this.Components.Add(inputManager);
+            camera = new Camera(this);
+            ServiceHelper.Add<ICameraService>(camera);
+            this.Components.Add(camera);
+
+            // Testing
+            InitializeField();
 
             base.Initialize();
         }
@@ -44,10 +85,10 @@ namespace MobRules
         /// </summary>
         protected override void LoadContent()
         {
-            // Create a new SpriteBatch, which can be used to draw textures.
-            spriteBatch = new SpriteBatch(GraphicsDevice);
-
-            // TODO: use this.Content to load your game content here
+            System.Console.WriteLine(Content.RootDirectory);
+            spriteBatch = new SpriteBatch(GraphicsDevice); // Create a new SpriteBatch, which can be used to draw textures.
+            asteroid = Content.Load<Model>(@"Models/asteroid1");
+            
         }
 
         /// <summary>
@@ -67,13 +108,40 @@ namespace MobRules
         protected override void Update(GameTime gameTime)
         {
             // Allows the game to exit
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
+            if (inputManager.CurrentKBState.IsKeyDown(Keys.Escape))
                 this.Exit();
-
-            // TODO: Add your update logic here
 
             base.Update(gameTime);
         }
+
+
+        //----------------------------------------------------------------------------------------------------
+        void DrawOne(Model m, Matrix world)
+        {
+            foreach (ModelMesh mesh in m.Meshes)
+            {
+                foreach (BasicEffect be in mesh.Effects)
+                {
+                    be.EnableDefaultLighting();
+                    be.Projection = camera.Projection;
+                    be.View = camera.View;
+                    be.World = world * mesh.ParentBone.Transform;
+                }
+                mesh.Draw();
+            }
+        }
+
+        void DrawField()
+        {
+            Matrix w;
+            for (int i = 0; i < numblocks; i++)
+            {
+                w = Matrix.CreateScale(planetsize) * Matrix.CreateTranslation(block[i]);
+                DrawOne(asteroid, w);
+            }
+        }
+        //----------------------------------------------------------------------------------------------------
+
 
         /// <summary>
         /// This is called when the game should draw itself.
@@ -83,7 +151,8 @@ namespace MobRules
         {
             graphics.GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            // TODO: Add your drawing code here
+            // Testing Code
+            DrawField();
 
             base.Draw(gameTime);
         }
