@@ -40,23 +40,6 @@ namespace MobRules
             ServiceHelper.Game = this;
         }
 
-        // Testing Code
-        void InitializeField()
-        {
-            numblocks = 400;
-            block = new Vector3[numblocks];
-
-            Random r = new Random();
-
-            for (int i = 0; i < numblocks; i++)
-            {
-                block[i].X = 500 - (float)r.NextDouble() * 1000;
-                block[i].Y = 500 - (float)r.NextDouble() * 1000;
-                block[i].Z = 500 - (float)r.NextDouble() * 1000;
-
-            }
-        }
-
         /// <summary>
         /// Allows the game to perform any initialization it needs to before starting to run.
         /// This is where it can query for any required services and load any non-graphic
@@ -73,9 +56,6 @@ namespace MobRules
             ServiceHelper.Add<ICameraService>(camera);
             this.Components.Add(camera);
 
-            // Testing
-            InitializeField();
-
             base.Initialize();
         }
 
@@ -85,10 +65,7 @@ namespace MobRules
         /// </summary>
         protected override void LoadContent()
         {
-            System.Console.WriteLine(Content.RootDirectory);
             spriteBatch = new SpriteBatch(GraphicsDevice); // Create a new SpriteBatch, which can be used to draw textures.
-            asteroid = Content.Load<Model>(@"Models/asteroid1");
-            
         }
 
         /// <summary>
@@ -97,7 +74,6 @@ namespace MobRules
         /// </summary>
         protected override void UnloadContent()
         {
-            // TODO: Unload any non ContentManager content here
         }
 
         /// <summary>
@@ -114,35 +90,6 @@ namespace MobRules
             base.Update(gameTime);
         }
 
-
-        //----------------------------------------------------------------------------------------------------
-        void DrawOne(Model m, Matrix world)
-        {
-            foreach (ModelMesh mesh in m.Meshes)
-            {
-                foreach (BasicEffect be in mesh.Effects)
-                {
-                    be.EnableDefaultLighting();
-                    be.Projection = camera.Projection;
-                    be.View = camera.View;
-                    be.World = world * mesh.ParentBone.Transform;
-                }
-                mesh.Draw();
-            }
-        }
-
-        void DrawField()
-        {
-            Matrix w;
-            for (int i = 0; i < numblocks; i++)
-            {
-                w = Matrix.CreateScale(planetsize) * Matrix.CreateTranslation(block[i]);
-                DrawOne(asteroid, w);
-            }
-        }
-        //----------------------------------------------------------------------------------------------------
-
-
         /// <summary>
         /// This is called when the game should draw itself.
         /// </summary>
@@ -151,8 +98,7 @@ namespace MobRules
         {
             graphics.GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            // Testing Code
-            DrawField();
+            
 
             base.Draw(gameTime);
         }

@@ -56,6 +56,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Effects\PhongEffect.cs" />
     <Compile Include="GameComponents\Camera.cs" />
     <Compile Include="GameComponents\InputManager.cs" />
     <Compile Include="Helpers\ServiceHelper.cs" />

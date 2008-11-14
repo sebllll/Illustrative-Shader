@@ -119,6 +119,7 @@ namespace MobRules.GameComponents
         {
             q = Quaternion.Multiply(qrot, q);
             q.Normalize();
+
             focus = Vector3.Transform(focusConst, q);
             up = Vector3.Transform(upConst, q);
         }
