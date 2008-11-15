@@ -25,17 +25,18 @@ namespace MobRules.Effects
 
         public void Initialize()
         {
-            phongShader = ServiceHelper.Content.Load<Effect>(@"Shaders/Phong");
+            phongShader = ServiceHelper.Content.Load<Effect>(@"Shaders\Phong");
 
             wvp       = phongShader.Parameters["wvp"];
             world     = phongShader.Parameters["world"];
             lightPos  = phongShader.Parameters["light"];
             intensity = phongShader.Parameters["intensity"];
-            texture   = phongShader.Parameters["texture"];
+            texture   = phongShader.Parameters["tex"];
             colour    = phongShader.Parameters["colour"];
+            phongShader.CommitChanges();
         }
 
-        public Effect PhongShader
+        public Effect Shader
         {
             get { return phongShader; }
         }

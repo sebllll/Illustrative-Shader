@@ -17,6 +17,11 @@ namespace MobRules.GameComponents
         private Matrix view, projection;
         private Quaternion q;
         private float timeLapse; // Time since last update
+
+        /// <summary>
+        /// Get the Camera Position.
+        /// </summary>
+        public Vector3 Position { get { return position; } }
         
         /// <summary>
         /// Get the view matrix.
