@@ -116,7 +116,7 @@ float4 PixelShaderFunction(VSOutput input) : COLOR0
     float4 fr = pow(1 - dot(unitNorm, unitView), 4);
     
     float4 viewDependent = lightColour * ks * max(fs * pow(cosB, kSpecMask), fr * pow(cosB, 2));
-    viewDependent += dot(unitNorm, up) * fr * (input.Amb, 0.3f);
+    viewDependent += dot(unitNorm, up) * fr * (input.Amb, 0.6f);
     
     return viewIndependent + viewDependent;
 }
