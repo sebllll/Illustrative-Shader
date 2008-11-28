@@ -30,20 +30,13 @@ namespace MobRules
         Camera camera = null;
 
         // Diffuse Warping Colour and Specular Highlight Texture
-        Texture2D warpTexture, specTexture, specMaskTexture;
+        Texture2D warpTexture;
 
         // Test Ship
-        Model ship, defShip;
-        Vector3 shipPos;
-        Vector2 shipRot;
-
-        // Test Cube
-        Vector3 cubePos;
-        Vector2 cubeRot;
-        private VertexPositionNormalTexture[] vertices;
-        private VertexDeclaration vertexDecl;
-        private VertexBuffer vertexBuffer;
-        private Texture2D colourMap;
+        Model frank, defFrank, ship, defShip;
+        Vector3 frankPosition, frankForward;
+        float frankAngle;
+        Quaternion frankQ;
 
         public Game1()
         {
@@ -72,14 +65,11 @@ namespace MobRules
             graphics.PreferMultiSampling = true;
             graphics.ApplyChanges();
 
-            // Setup Test Ship
-            shipPos = new Vector3(-4.0f, -2.5f, -25.0f);
-            shipRot = new Vector2(90.0f, 0.0f);
-
-            // Setup Test Cube.
-            cubePos = new Vector3(0.0f, 0.0f, -5.0f);
-            cubeRot = Vector2.Zero;
-            GenerateCube(2.0f);
+            // Setup Frank
+            frankPosition = new Vector3(-4.0f, -10.0f, -25.0f);
+            frankForward = Vector3.Backward;
+            frankQ = Quaternion.Identity;
+            frankAngle = 0.0f;
 
             // Start and add Game Services/Components
             inputManager = new InputManager(this);
@@ -92,90 +82,11 @@ namespace MobRules
             base.Initialize();
         }
 
-        private void GenerateCube(float size)
-        {
-            float halfSize = size * 0.5f;
-
-            Vector3[] corners =
-            {
-                new Vector3(-halfSize,  halfSize,  halfSize),   // 0
-                new Vector3( halfSize,  halfSize,  halfSize),   // 1
-                new Vector3( halfSize, -halfSize,  halfSize),   // 2
-                new Vector3(-halfSize, -halfSize,  halfSize),   // 3
-                new Vector3(-halfSize,  halfSize, -halfSize),   // 4
-                new Vector3( halfSize,  halfSize, -halfSize),   // 5
-                new Vector3( halfSize, -halfSize, -halfSize),   // 6
-                new Vector3(-halfSize, -halfSize, -halfSize)    // 7
-            };
-
-            Vector2[] texCoords =
-            {
-                new Vector2(0.0f, 0.0f),    // top left corner
-                new Vector2(1.0f, 0.0f),    // top right corner
-                new Vector2(1.0f, 1.0f),    // bottom right corner
-                new Vector2(0.0f, 1.0f)     // bottom left corner
-            };
-
-            vertices = new VertexPositionNormalTexture[36];
-
-            // +z face = 0123 tri1 = 012 tri2 = 230
-            vertices[0] = new VertexPositionNormalTexture(corners[0], Vector3.Backward, texCoords[0]);
-            vertices[1] = new VertexPositionNormalTexture(corners[1], Vector3.Backward, texCoords[1]);
-            vertices[2] = new VertexPositionNormalTexture(corners[2], Vector3.Backward, texCoords[2]);
-            vertices[3] = new VertexPositionNormalTexture(corners[2], Vector3.Backward, texCoords[2]);
-            vertices[4] = new VertexPositionNormalTexture(corners[3], Vector3.Backward, texCoords[3]);
-            vertices[5] = new VertexPositionNormalTexture(corners[0], Vector3.Backward, texCoords[0]);
-
-            // -z face = 5476 tri1 = 547 tri2 = 765
-            vertices[6] = new VertexPositionNormalTexture(corners[5], Vector3.Forward, texCoords[0]);
-            vertices[7] = new VertexPositionNormalTexture(corners[4], Vector3.Forward, texCoords[1]);
-            vertices[8] = new VertexPositionNormalTexture(corners[7], Vector3.Forward, texCoords[2]);
-            vertices[9] = new VertexPositionNormalTexture(corners[7], Vector3.Forward, texCoords[2]);
-            vertices[10] = new VertexPositionNormalTexture(corners[6], Vector3.Forward, texCoords[3]);
-            vertices[11] = new VertexPositionNormalTexture(corners[5], Vector3.Forward, texCoords[0]);
-
-            // +y face = 4510 tri1 = 451 tri2 = 104
-            vertices[12] = new VertexPositionNormalTexture(corners[4], Vector3.Up, texCoords[0]);
-            vertices[13] = new VertexPositionNormalTexture(corners[5], Vector3.Up, texCoords[1]);
-            vertices[14] = new VertexPositionNormalTexture(corners[1], Vector3.Up, texCoords[2]);
-            vertices[15] = new VertexPositionNormalTexture(corners[1], Vector3.Up, texCoords[2]);
-            vertices[16] = new VertexPositionNormalTexture(corners[0], Vector3.Up, texCoords[3]);
-            vertices[17] = new VertexPositionNormalTexture(corners[4], Vector3.Up, texCoords[0]);
-
-            // -y face = 3267 tri1 = 326 tri2 = 673
-            vertices[18] = new VertexPositionNormalTexture(corners[3], Vector3.Down, texCoords[0]);
-            vertices[19] = new VertexPositionNormalTexture(corners[2], Vector3.Down, texCoords[1]);
-            vertices[20] = new VertexPositionNormalTexture(corners[6], Vector3.Down, texCoords[2]);
-            vertices[21] = new VertexPositionNormalTexture(corners[6], Vector3.Down, texCoords[2]);
-            vertices[22] = new VertexPositionNormalTexture(corners[7], Vector3.Down, texCoords[3]);
-            vertices[23] = new VertexPositionNormalTexture(corners[3], Vector3.Down, texCoords[0]);
-
-            // +x face = 1562 tri1 = 156 tri2 = 621
-            vertices[24] = new VertexPositionNormalTexture(corners[1], Vector3.Right, texCoords[0]);
-            vertices[25] = new VertexPositionNormalTexture(corners[5], Vector3.Right, texCoords[1]);
-            vertices[26] = new VertexPositionNormalTexture(corners[6], Vector3.Right, texCoords[2]);
-            vertices[27] = new VertexPositionNormalTexture(corners[6], Vector3.Right, texCoords[2]);
-            vertices[28] = new VertexPositionNormalTexture(corners[2], Vector3.Right, texCoords[3]);
-            vertices[29] = new VertexPositionNormalTexture(corners[1], Vector3.Right, texCoords[0]);
-
-            // -x face = 4037 tri1 = 403 tri2 = 374
-            vertices[30] = new VertexPositionNormalTexture(corners[4], Vector3.Left, texCoords[0]);
-            vertices[31] = new VertexPositionNormalTexture(corners[0], Vector3.Left, texCoords[1]);
-            vertices[32] = new VertexPositionNormalTexture(corners[3], Vector3.Left, texCoords[2]);
-            vertices[33] = new VertexPositionNormalTexture(corners[3], Vector3.Left, texCoords[2]);
-            vertices[34] = new VertexPositionNormalTexture(corners[7], Vector3.Left, texCoords[3]);
-            vertices[35] = new VertexPositionNormalTexture(corners[4], Vector3.Left, texCoords[0]);
-            
-            vertexDecl = new VertexDeclaration(graphics.GraphicsDevice, VertexPositionNormalTexture.VertexElements);
-            vertexBuffer = new VertexBuffer(graphics.GraphicsDevice, VertexPositionNormalTexture.SizeInBytes * vertices.Length, BufferUsage.WriteOnly);
-            vertexBuffer.SetData<VertexPositionNormalTexture>(vertices);
-        }
-
         /// <summary>
         /// Alters a model so it will draw using a custom effect, while preserving
         /// whatever textures were set on it as part of the original effects.
         /// </summary>
-        private void ChangeModelEffect(Model model, Effect replacementEffect)
+        private void ChangeModelEffect(Model model, Effect replacementEffect, string specularMask, string specularExponent)
         {
             // Table mapping the original effects to our replacement versions.
             Dictionary<Effect, Effect> effectMapping = new Dictionary<Effect, Effect>();
@@ -197,9 +108,12 @@ namespace MobRules
 
                         // Copy across the texture from the original effect.
                         newEffect.Parameters["WarpTexture"].SetValue(warpTexture);
-                        newEffect.Parameters["SpecTexture"].SetValue(specTexture);
-                        newEffect.Parameters["SpecMaskTexture"].SetValue(specMaskTexture);
+                        Texture2D specText = Content.Load<Texture2D>(@specularExponent);
+                        Texture2D specMaskText = Content.Load<Texture2D>(@specularMask);
+                        newEffect.Parameters["SpecTexture"].SetValue(specText);
+                        newEffect.Parameters["SpecMaskTexture"].SetValue(specMaskText);
                         newEffect.Parameters["Texture"].SetValue(oldEffect.Texture);
+                        
                         newEffect.Parameters["TextureEnabled"].SetValue(oldEffect.TextureEnabled);
 
                         effectMapping.Add(oldEffect, newEffect);
@@ -222,20 +136,21 @@ namespace MobRules
         protected override void LoadContent()
         {
             spriteBatch = new SpriteBatch(GraphicsDevice); // Create a new SpriteBatch, which can be used to draw textures.
-            colourMap = Content.Load<Texture2D>(@"Textures/color_map");
 
             // Load the warp colour (From mitchell p19)
             warpTexture = Content.Load<Texture2D>(@"Textures/warp");
-            specTexture = Content.Load<Texture2D>(@"Textures/ShipSpecular");
-            specMaskTexture = Content.Load<Texture2D>(@"Textures/ShipSpecularMask");
 
             // A ship using the default BasicEffect
             defShip = Content.Load<Model>(@"Models/Ship2");
+            defFrank = Content.Load<Model>(@"Models/Frank2");
 
             // Change the model to use the illustrative shader
             Effect illustrative = Content.Load<Effect>(@"Shaders/Illustrative");
+            frank = Content.Load<Model>(@"Models/Frank");
+            ChangeModelEffect(frank, illustrative, "Textures/BodySpecularMask", "Textures/BodySpecular");
+
             ship = Content.Load<Model>(@"Models/Ship");
-            ChangeModelEffect(ship, illustrative);
+            ChangeModelEffect(ship, illustrative, "Textures/ShipSpecularMask", "Textures/ShipSpecular");
         }
 
         /// <summary>
@@ -257,6 +172,47 @@ namespace MobRules
             if (inputManager.CurrentKBState.IsKeyDown(Keys.Escape))
                 this.Exit();
 
+            const float scale = 0.5f;
+
+            Vector3 right = Vector3.Cross(frankForward, Vector3.Up);
+            right.Normalize();
+
+            // Move Frank forward and backward
+            if (inputManager.CurrentKBState.IsKeyDown(Keys.I))
+                frankPosition += frankForward * scale;
+            else if (inputManager.CurrentKBState.IsKeyDown(Keys.K))
+                frankPosition -= frankForward * scale;
+            // Strafe Frank left and right
+            if (inputManager.CurrentKBState.IsKeyDown(Keys.J))
+                frankPosition -= right * (scale - 0.15f);
+            else if (inputManager.CurrentKBState.IsKeyDown(Keys.L))
+                frankPosition += right * (scale - 0.15f);
+            // Move Frank up and down
+            if (inputManager.CurrentKBState.IsKeyDown(Keys.Y))
+                frankPosition += Vector3.Up * (scale - 0.15f);
+            else if (inputManager.CurrentKBState.IsKeyDown(Keys.H))
+                frankPosition -= Vector3.Up * (scale - 0.15f);
+            /* Rotate Frank
+            if (inputManager.CurrentKBState.IsKeyDown(Keys.U))
+            {
+                Quaternion qrot = Quaternion.CreateFromAxisAngle(Vector3.Up, scale * 0.1f);
+                frankQ = Quaternion.Multiply(qrot, frankQ);
+                frankQ.Normalize();
+                frankForward = Vector3.Transform(Vector3.Backward, frankQ);
+                //frankAngle += (float)Math.Acos(Vector3.Dot(frankForward, Vector3.));
+                frankAngle += (float) (Math.Atan2(frankForward.Y, frankForward.Z) - Math.Atan2(0, 1));
+
+            }
+            else if (inputManager.CurrentKBState.IsKeyDown(Keys.O))
+            {
+                Quaternion qrot = Quaternion.CreateFromAxisAngle(Vector3.Up, -scale);
+                frankQ = Quaternion.Multiply(qrot, frankQ);
+                frankQ.Normalize();
+                frankForward = Vector3.Transform(Vector3.Backward, frankQ);
+            }*/
+            
+            
+
             /*
             // Update the Effect
             Matrix world = Matrix.CreateRotationY(MathHelper.ToRadians(cubeRot.Y)) * Matrix.CreateRotationX(MathHelper.ToRadians(cubeRot.X)) * Matrix.CreateTranslation(cubePos);
@@ -276,22 +232,6 @@ namespace MobRules
             base.Update(gameTime);
         }
 
-/*        private void DrawCube()
-        {
-            graphics.GraphicsDevice.VertexDeclaration = vertexDecl;
-            graphics.GraphicsDevice.Vertices[0].SetSource(vertexBuffer, 0, VertexPositionNormalTexture.SizeInBytes);
-
-            phongEffect.Shader.Begin();
-            foreach (EffectPass pass in phongEffect.Shader.CurrentTechnique.Passes)
-            {
-                pass.Begin();
-                graphics.GraphicsDevice.DrawPrimitives(PrimitiveType.TriangleList, 0, 12);
-                pass.End();
-            }
-            phongEffect.Shader.End();
-        }
-*/
-
         /// <summary>
         /// This is called when the game should draw itself.
         /// </summary>
@@ -300,18 +240,14 @@ namespace MobRules
         {
             graphics.GraphicsDevice.Clear(Color.Black);
 
-            //DrawCube();
-            
-            Matrix world = Matrix.CreateScale(0.01f) * Matrix.CreateRotationY(MathHelper.ToRadians(shipRot.X)) * Matrix.CreateRotationX(MathHelper.ToRadians(shipRot.Y)) * Matrix.CreateTranslation(shipPos);
+            Matrix world = Matrix.CreateRotationY(MathHelper.ToRadians(frankAngle)) * Matrix.CreateTranslation(frankPosition);
             
             // Look up the bone transform matrices.
-            Matrix[] transforms = new Matrix[ship.Bones.Count];
-            ship.CopyAbsoluteBoneTransformsTo(transforms);
-
-            System.Console.WriteLine(defShip.Meshes.Count);
+            Matrix[] transforms = new Matrix[frank.Bones.Count];
+            frank.CopyAbsoluteBoneTransformsTo(transforms);
 
             // Draw the model
-            foreach (ModelMesh mesh in ship.Meshes)
+            foreach (ModelMesh mesh in frank.Meshes)
             {
                 foreach (Effect effect in mesh.Effects)
                 {
@@ -327,6 +263,25 @@ namespace MobRules
                 mesh.Draw();
             }
 
+            world *= Matrix.CreateTranslation(new Vector3(5.0f, 0.0f, 0.0f));
+
+            defFrank.CopyAbsoluteBoneTransformsTo(transforms);
+            // Draw the model with default lighting
+            foreach (ModelMesh mesh in defFrank.Meshes)
+            {
+                foreach (BasicEffect be in mesh.Effects)
+                {
+                    be.EnableDefaultLighting();
+                    Matrix locWorld = transforms[mesh.ParentBone.Index] * world;
+                    be.World = locWorld;
+                    be.View = camera.View;
+                    be.Projection = camera.Projection;
+                }
+                mesh.Draw();
+            }
+
+            world = Matrix.CreateScale(0.01f) * Matrix.CreateRotationY((float)Math.PI) * Matrix.CreateTranslation(frankPosition + new Vector3(0.0f, 5.0f, 0.0f));
+
             defShip.CopyAbsoluteBoneTransformsTo(transforms);
             // Draw the model with default lighting
             foreach (ModelMesh mesh in defShip.Meshes)
@@ -338,8 +293,28 @@ namespace MobRules
                     be.World = locWorld;
                     be.View = camera.View;
                     be.Projection = camera.Projection;
-                    //be.LightingEnabled = true;
-                    //be.DirectionalLight0 = new Vector4(10.0f, 10.0f, 0.0f, 1.0f);
+                }
+                mesh.Draw();
+            }
+
+            world *= Matrix.CreateTranslation(new Vector3(25.0f, 0.0f, -25.0f));
+
+            transforms = new Matrix[ship.Bones.Count];
+            ship.CopyAbsoluteBoneTransformsTo(transforms);
+
+            // Draw the model
+            foreach (ModelMesh mesh in ship.Meshes)
+            {
+                foreach (Effect effect in mesh.Effects)
+                {
+                    Matrix locWorld = transforms[mesh.ParentBone.Index] * world;
+                    effect.Parameters["World"].SetValue(locWorld);
+                    effect.Parameters["View"].SetValue(camera.View);
+                    effect.Parameters["Projection"].SetValue(camera.Projection);
+                    effect.Parameters["Camera"].SetValue(camera.Position);
+                    //effect.Parameters["Light"].SetValue(new Vector4(camera.Position, 1.0f));
+                    effect.Parameters["Light"].SetValue(new Vector4(10.0f, 10.0f, 0.0f, 1.0f)); // Top right corner of screen
+                    effect.Parameters["LightColour"].SetValue(new Vector4(0.7f, 0.5f, 0.5f, 1.0f));
                 }
                 mesh.Draw();
             }

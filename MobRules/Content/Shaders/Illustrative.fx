@@ -105,8 +105,8 @@ float4 PixelShaderFunction(VSOutput input) : COLOR0
     float3 r = normalize(2 * cosA * unitNorm - unitLightDir); // R = 2 * (N.L) * N - L
     float3 up = {0.0f, 1.0f, 0.0f};
     
-    float4 ks = tex2D(specTextureSampler, input.Tex); // Specular
-    float kSpecMask = tex2D(specMaskTextureSampler, input.Tex)[0];
+    float4 ks = tex2D(specMaskTextureSampler, input.Tex); // Specular
+    float kSpecExp = tex2D(specTextureSampler, input.Tex)[0];
     //float4 kr = tex2D(rimTextureSampler, input.Tex); // Rim Highlight mask (Optional for Problem Cases)
     
     float cosB = dot(unitView, r);
@@ -115,7 +115,7 @@ float4 PixelShaderFunction(VSOutput input) : COLOR0
     float4 fs = pow(1.4 - dot(unitNorm, unitView), 4);
     float4 fr = pow(1 - dot(unitNorm, unitView), 4);
     
-    float4 viewDependent = lightColour * ks * max(fs * pow(cosB, kSpecMask), fr * pow(cosB, 2));
+    float4 viewDependent = lightColour * ks * max(fs * pow(cosB, kSpecExp), fr * pow(cosB, 2));
     viewDependent += dot(unitNorm, up) * fr * (input.Amb, 0.6f);
     
     return viewIndependent + viewDependent;
