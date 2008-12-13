@@ -60,7 +60,6 @@ namespace MobRules.GameComponents
 
             // Reset the mouse to the centre of the screen
             Mouse.SetPosition(centreX, centreY);
-            
 
             base.Update(gameTime);
         }

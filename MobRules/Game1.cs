@@ -146,6 +146,7 @@ namespace MobRules
 
             // Change the model to use the illustrative shader
             Effect illustrative = Content.Load<Effect>(@"Shaders/Illustrative");
+            
             frank = Content.Load<Model>(@"Models/Frank");
             ChangeModelEffect(frank, illustrative, "Textures/BodySpecularMask", "Textures/BodySpecular");
 
@@ -192,44 +193,53 @@ namespace MobRules
                 frankPosition += Vector3.Up * (scale - 0.15f);
             else if (inputManager.CurrentKBState.IsKeyDown(Keys.H))
                 frankPosition -= Vector3.Up * (scale - 0.15f);
-            /* Rotate Frank
-            if (inputManager.CurrentKBState.IsKeyDown(Keys.U))
-            {
-                Quaternion qrot = Quaternion.CreateFromAxisAngle(Vector3.Up, scale * 0.1f);
-                frankQ = Quaternion.Multiply(qrot, frankQ);
-                frankQ.Normalize();
-                frankForward = Vector3.Transform(Vector3.Backward, frankQ);
-                //frankAngle += (float)Math.Acos(Vector3.Dot(frankForward, Vector3.));
-                frankAngle += (float) (Math.Atan2(frankForward.Y, frankForward.Z) - Math.Atan2(0, 1));
-
-            }
-            else if (inputManager.CurrentKBState.IsKeyDown(Keys.O))
-            {
-                Quaternion qrot = Quaternion.CreateFromAxisAngle(Vector3.Up, -scale);
-                frankQ = Quaternion.Multiply(qrot, frankQ);
-                frankQ.Normalize();
-                frankForward = Vector3.Transform(Vector3.Backward, frankQ);
-            }*/
-            
-            
-
-            /*
-            // Update the Effect
-            Matrix world = Matrix.CreateRotationY(MathHelper.ToRadians(cubeRot.Y)) * Matrix.CreateRotationX(MathHelper.ToRadians(cubeRot.X)) * Matrix.CreateTranslation(cubePos);
-
-            Matrix wvp = world * camera.View * camera.Projection;
-
-            // Update the Phong Effect
-            phongEffect.World = world;
-            phongEffect.WorldViewProjection = wvp;
-            phongEffect.Texture = colourMap;
-            phongEffect.LightColour = Vector4.One;
-            phongEffect.LightPosition = new Vector4(camera.Position, 1.0f);
-            phongEffect.LightIntensity = 2.0f;
-            phongEffect.Shader.CommitChanges();
-            */
-             
+                         
             base.Update(gameTime);
+        }
+
+        void DrawModel(Model model, Matrix world)
+        {
+            // Look up the bone transform matrices.
+            Matrix[] transforms = new Matrix[model.Bones.Count];
+            model.CopyAbsoluteBoneTransformsTo(transforms);
+
+            // Draw the model with default lighting
+            foreach (ModelMesh mesh in model.Meshes)
+            {
+                foreach (BasicEffect be in mesh.Effects)
+                {
+                    be.EnableDefaultLighting();
+                    Matrix locWorld = transforms[mesh.ParentBone.Index] * world;
+                    be.World = locWorld;
+                    be.View = camera.View;
+                    be.Projection = camera.Projection;
+                }
+                mesh.Draw();
+            }
+        }
+
+        void DrawIllustrativeModel(Model model, Matrix world)
+        {
+            // Look up the bone transform matrices.
+            Matrix[] transforms = new Matrix[model.Bones.Count];
+            model.CopyAbsoluteBoneTransformsTo(transforms);
+
+            // Draw the model
+            foreach (ModelMesh mesh in model.Meshes)
+            {
+                foreach (Effect effect in mesh.Effects)
+                {
+                    Matrix locWorld = transforms[mesh.ParentBone.Index] * world;
+                    effect.Parameters["World"].SetValue(locWorld);
+                    effect.Parameters["View"].SetValue(camera.View);
+                    effect.Parameters["Projection"].SetValue(camera.Projection);
+                    effect.Parameters["Camera"].SetValue(camera.Position);
+                    //effect.Parameters["Light"].SetValue(new Vector4(camera.Position, 1.0f));
+                    effect.Parameters["Light"].SetValue(new Vector4(10.0f, 10.0f, 0.0f, 1.0f)); // Top right corner of screen
+                    effect.Parameters["LightColour"].SetValue(new Vector4(0.7f, 0.5f, 0.5f, 1.0f));
+                }
+                mesh.Draw();
+            }
         }
 
         /// <summary>
@@ -240,84 +250,22 @@ namespace MobRules
         {
             graphics.GraphicsDevice.Clear(Color.Black);
 
-            Matrix world = Matrix.CreateRotationY(MathHelper.ToRadians(frankAngle)) * Matrix.CreateTranslation(frankPosition);
-            
-            // Look up the bone transform matrices.
-            Matrix[] transforms = new Matrix[frank.Bones.Count];
-            frank.CopyAbsoluteBoneTransformsTo(transforms);
-
-            // Draw the model
-            foreach (ModelMesh mesh in frank.Meshes)
-            {
-                foreach (Effect effect in mesh.Effects)
-                {
-                    Matrix locWorld = transforms[mesh.ParentBone.Index] * world;
-                    effect.Parameters["World"].SetValue(locWorld);
-                    effect.Parameters["View"].SetValue(camera.View);
-                    effect.Parameters["Projection"].SetValue(camera.Projection);
-                    effect.Parameters["Camera"].SetValue(camera.Position);
-                    //effect.Parameters["Light"].SetValue(new Vector4(camera.Position, 1.0f));
-                    effect.Parameters["Light"].SetValue(new Vector4(10.0f, 10.0f, 0.0f, 1.0f)); // Top right corner of screen
-                    effect.Parameters["LightColour"].SetValue(new Vector4(0.7f, 0.5f, 0.5f, 1.0f));
-                }
-                mesh.Draw();
-            }
-
+            // Draw Frank
+            Matrix world = Matrix.CreateRotationY(MathHelper.ToRadians(frankAngle)) * Matrix.CreateTranslation(frankPosition) * Matrix.CreateTranslation(4.5f, 5.0f, 10.0f);
+            DrawIllustrativeModel(frank, world);
+            /*
+            // Draw Frank with default lighting
             world *= Matrix.CreateTranslation(new Vector3(5.0f, 0.0f, 0.0f));
+            DrawModel(defFrank, world);
 
-            defFrank.CopyAbsoluteBoneTransformsTo(transforms);
-            // Draw the model with default lighting
-            foreach (ModelMesh mesh in defFrank.Meshes)
-            {
-                foreach (BasicEffect be in mesh.Effects)
-                {
-                    be.EnableDefaultLighting();
-                    Matrix locWorld = transforms[mesh.ParentBone.Index] * world;
-                    be.World = locWorld;
-                    be.View = camera.View;
-                    be.Projection = camera.Projection;
-                }
-                mesh.Draw();
-            }
+            // Draw the ship with default lighting
+            world = Matrix.CreateScale(0.01f) * Matrix.CreateRotationY((float)Math.PI) * Matrix.CreateTranslation(frankPosition + new Vector3(0.0f, 5.0f, -20.0f));
+            DrawModel(defShip, world);
 
-            world = Matrix.CreateScale(0.01f) * Matrix.CreateRotationY((float)Math.PI) * Matrix.CreateTranslation(frankPosition + new Vector3(0.0f, 5.0f, 0.0f));
-
-            defShip.CopyAbsoluteBoneTransformsTo(transforms);
-            // Draw the model with default lighting
-            foreach (ModelMesh mesh in defShip.Meshes)
-            {
-                foreach (BasicEffect be in mesh.Effects)
-                {
-                    be.EnableDefaultLighting();
-                    Matrix locWorld = transforms[mesh.ParentBone.Index] * world * Matrix.CreateTranslation(0.0f, 0.0f, -25.0f);
-                    be.World = locWorld;
-                    be.View = camera.View;
-                    be.Projection = camera.Projection;
-                }
-                mesh.Draw();
-            }
-
-            world *= Matrix.CreateTranslation(new Vector3(25.0f, 0.0f, -25.0f));
-
-            transforms = new Matrix[ship.Bones.Count];
-            ship.CopyAbsoluteBoneTransformsTo(transforms);
-
-            // Draw the model
-            foreach (ModelMesh mesh in ship.Meshes)
-            {
-                foreach (Effect effect in mesh.Effects)
-                {
-                    Matrix locWorld = transforms[mesh.ParentBone.Index] * world;
-                    effect.Parameters["World"].SetValue(locWorld);
-                    effect.Parameters["View"].SetValue(camera.View);
-                    effect.Parameters["Projection"].SetValue(camera.Projection);
-                    effect.Parameters["Camera"].SetValue(camera.Position);
-                    //effect.Parameters["Light"].SetValue(new Vector4(camera.Position, 1.0f));
-                    effect.Parameters["Light"].SetValue(new Vector4(10.0f, 10.0f, 0.0f, 1.0f)); // Top right corner of screen
-                    effect.Parameters["LightColour"].SetValue(new Vector4(0.7f, 0.5f, 0.5f, 1.0f));
-                }
-                mesh.Draw();
-            }
+            // Draw the ship
+            world *= Matrix.CreateTranslation(new Vector3(25.0f, 0.0f, 0.0f));
+            DrawIllustrativeModel(ship, world);
+            */
 
             base.Draw(gameTime);
         }

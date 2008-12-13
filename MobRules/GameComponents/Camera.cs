@@ -79,7 +79,7 @@ namespace MobRules.GameComponents
             if (inputManager.CurrentKBState.IsKeyDown(Keys.A))
                 strafe -= 1.0f;
             if (inputManager.CurrentKBState.IsKeyDown(Keys.D))
-                 strafe += 1.0f;
+                strafe += 1.0f;
             
             // Rotate the camera
             Vector2 mouseMoved = inputManager.MouseMoved;
