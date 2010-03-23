@@ -253,7 +253,7 @@ namespace MobRules
             // Draw Frank
             Matrix world = Matrix.CreateRotationY(MathHelper.ToRadians(frankAngle)) * Matrix.CreateTranslation(frankPosition) * Matrix.CreateTranslation(4.5f, 5.0f, 10.0f);
             DrawIllustrativeModel(frank, world);
-            /*
+            
             // Draw Frank with default lighting
             world *= Matrix.CreateTranslation(new Vector3(5.0f, 0.0f, 0.0f));
             DrawModel(defFrank, world);
@@ -261,11 +261,10 @@ namespace MobRules
             // Draw the ship with default lighting
             world = Matrix.CreateScale(0.01f) * Matrix.CreateRotationY((float)Math.PI) * Matrix.CreateTranslation(frankPosition + new Vector3(0.0f, 5.0f, -20.0f));
             DrawModel(defShip, world);
-
+            
             // Draw the ship
-            world *= Matrix.CreateTranslation(new Vector3(25.0f, 0.0f, 0.0f));
+            world = Matrix.CreateScale(0.01f) * Matrix.CreateRotationY((float)Math.PI) * Matrix.CreateTranslation(frankPosition + new Vector3(0.0f, 5.0f, -20.0f)) * Matrix.CreateTranslation(new Vector3(25.0f, 0.0f, 0.0f));
             DrawIllustrativeModel(ship, world);
-            */
 
             base.Draw(gameTime);
         }

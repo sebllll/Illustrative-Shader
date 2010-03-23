@@ -97,7 +97,7 @@ float4 PixelShaderFunction(VSOutput input) : COLOR0
     float a = 0.5f; // From Gooch
     float b = 0.5f; // From Gooch
     int y   = 1;    // From p19-mitchell
-    
+
     float4 viewIndependent = kd * (input.Amb + lightColour * W( pow((a * dot(unitNorm, unitLightDir) + b), y)));
     
     // View Dependent Terms

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type='text/xsl' href='_UpgradeReport_Files/UpgradeReport.xslt'?><UpgradeLog>
+<Properties><Property Name="Solution" Value="MobRules">
+</Property><Property Name="Solution File" Value="E:\My Documents\Visual Studio 2005\Projects\MobRules\MobRules.sln">
+</Property><Property Name="User Options File" Value="E:\My Documents\Visual Studio 2005\Projects\MobRules\MobRules.suo">
+</Property><Property Name="Date" Value="April 1, 2009">
+</Property><Property Name="Time" Value="0:29 AM">
+</Property></Properties><Event ErrorLevel="0" Project="" Source="MobRules.sln" Description="File successfully backed up as E:\My Documents\Visual Studio 2005\Projects\MobRules\Backup\MobRules.sln">
+</Event><Event ErrorLevel="0" Project="" Source="MobRules.suo" Description="File successfully backed up as E:\My Documents\Visual Studio 2005\Projects\MobRules\Backup\MobRules.suo">
+</Event><Event ErrorLevel="0" Project="MobRules" Source="MobRules\MobRules.csproj" Description="Upgraded XNA Game Studio nested content projects.">
+</Event><Event ErrorLevel="0" Project="MobRules" Source="MobRules\MobRules.csproj" Description="Upgraded XNA Game Studio project.">
+</Event><Event ErrorLevel="0" Project="MobRules" Source="MobRules\MobRules.csproj" Description="Project file successfully backed up as E:\My Documents\Visual Studio 2005\Projects\MobRules\Backup\MobRules\MobRules.csproj">
+</Event><Event ErrorLevel="0" Project="MobRules" Source="MobRules\MobRules.csproj.user" Description="Project user file successfully backed up as E:\My Documents\Visual Studio 2005\Projects\MobRules\Backup\MobRules\MobRules.csproj.user">
+</Event><Event ErrorLevel="0" Project="MobRules" Source="MobRules\Effects\PhongEffect.cs" Description="File successfully backed up as E:\My Documents\Visual Studio 2005\Projects\MobRules\Backup\MobRules\Effects\PhongEffect.cs">
+</Event><Event ErrorLevel="0" Project="MobRules" Source="MobRules\GameComponents\Camera.cs" Description="File successfully backed up as E:\My Documents\Visual Studio 2005\Projects\MobRules\Backup\MobRules\GameComponents\Camera.cs">
+</Event><Event ErrorLevel="0" Project="MobRules" Source="MobRules\GameComponents\InputManager.cs" Description="File successfully backed up as E:\My Documents\Visual Studio 2005\Projects\MobRules\Backup\MobRules\GameComponents\InputManager.cs">
+</Event><Event ErrorLevel="0" Project="MobRules" Source="MobRules\Helpers\ServiceHelper.cs" Description="File successfully backed up as E:\My Documents\Visual Studio 2005\Projects\MobRules\Backup\MobRules\Helpers\ServiceHelper.cs">
+</Event><Event ErrorLevel="0" Project="MobRules" Source="MobRules\Interfaces\ICameraService.cs" Description="File successfully backed up as E:\My Documents\Visual Studio 2005\Projects\MobRules\Backup\MobRules\Interfaces\ICameraService.cs">
+</Event><Event ErrorLevel="0" Project="MobRules" Source="MobRules\Interfaces\IInputManagerService.cs" Description="File successfully backed up as E:\My Documents\Visual Studio 2005\Projects\MobRules\Backup\MobRules\Interfaces\IInputManagerService.cs">
+</Event><Event ErrorLevel="0" Project="MobRules" Source="MobRules\Properties\AssemblyInfo.cs" Description="File successfully backed up as E:\My Documents\Visual Studio 2005\Projects\MobRules\Backup\MobRules\Properties\AssemblyInfo.cs">
+</Event><Event ErrorLevel="0" Project="MobRules" Source="MobRules\Program.cs" Description="File successfully backed up as E:\My Documents\Visual Studio 2005\Projects\MobRules\Backup\MobRules\Program.cs">
+</Event><Event ErrorLevel="0" Project="MobRules" Source="MobRules\Game1.cs" Description="File successfully backed up as E:\My Documents\Visual Studio 2005\Projects\MobRules\Backup\MobRules\Game1.cs">
+</Event><Event ErrorLevel="0" Project="MobRules" Source="MobRules\Game.ico" Description="File successfully backed up as E:\My Documents\Visual Studio 2005\Projects\MobRules\Backup\MobRules\Game.ico">
+</Event><Event ErrorLevel="0" Project="MobRules" Source="MobRules\GameThumbnail.png" Description="File successfully backed up as E:\My Documents\Visual Studio 2005\Projects\MobRules\Backup\MobRules\GameThumbnail.png">
+</Event><Event ErrorLevel="0" Project="MobRules" Source="MobRules\MobRules.csproj" Description="Project converted successfully">
+</Event><Event ErrorLevel="3" Project="MobRules" Source="MobRules\MobRules.csproj" Description="Converted">
+</Event><Event ErrorLevel="0" Project="" Source="MobRules.sln" Description="Solution converted successfully">
+</Event><Event ErrorLevel="3" Project="" Source="MobRules.sln" Description="Converted">
+</Event><Event ErrorLevel="0" Project="MobRules" Source="MobRules\MobRules.csproj" Description="Scan complete: Upgrade not required for project files.">
+</Event><Event ErrorLevel="0" Project="MobRules" Source="MobRules\MobRules.csproj" Description="Upgraded XNA Framework References.">
+</Event><Event ErrorLevel="0" Project="Content" Source="Ship.fbx" Description="Copied XNA Game Studio Content Project content to backup location.">
+</Event><Event ErrorLevel="0" Project="Content" Source="ShipDiffuse2.tga" Description="Copied XNA Game Studio Content Project content to backup location.">
+</Event><Event ErrorLevel="0" Project="Content" Source="Ship2.fbx" Description="Copied XNA Game Studio Content Project content to backup location.">
+</Event><Event ErrorLevel="0" Project="Content" Source="Frank.fbx" Description="Copied XNA Game Studio Content Project content to backup location.">
+</Event><Event ErrorLevel="0" Project="Content" Source="Frank2.fbx" Description="Copied XNA Game Studio Content Project content to backup location.">
+</Event><Event ErrorLevel="0" Project="Content" Source="ShipDiffuse.tga" Description="Copied XNA Game Studio Content Project content to backup location.">
+</Event><Event ErrorLevel="0" Project="Content" Source="Phong.fx" Description="Copied XNA Game Studio Content Project content to backup location.">
+</Event><Event ErrorLevel="0" Project="Content" Source="Illustrative.fx" Description="Copied XNA Game Studio Content Project content to backup location.">
+</Event><Event ErrorLevel="0" Project="Content" Source="color_map.dds" Description="Copied XNA Game Studio Content Project content to backup location.">
+</Event><Event ErrorLevel="0" Project="Content" Source="Thumbs.db" Description="Copied XNA Game Studio Content Project content to backup location.">
+</Event><Event ErrorLevel="0" Project="Content" Source="ShipSpecular.tga" Description="Copied XNA Game Studio Content Project content to backup location.">
+</Event><Event ErrorLevel="0" Project="Content" Source="BodySpecular.tga" Description="Copied XNA Game Studio Content Project content to backup location.">
+</Event><Event ErrorLevel="0" Project="Content" Source="faceSpecular.tga" Description="Copied XNA Game Studio Content Project content to backup location.">
+</Event><Event ErrorLevel="0" Project="Content" Source="faceSpecularMask.tga" Description="Copied XNA Game Studio Content Project content to backup location.">
+</Event><Event ErrorLevel="0" Project="Content" Source="BodySpecularMask.tga" Description="Copied XNA Game Studio Content Project content to backup location.">
+</Event><Event ErrorLevel="0" Project="Content" Source="ShipSpecularMask.tga" Description="Copied XNA Game Studio Content Project content to backup location.">
+</Event><Event ErrorLevel="0" Project="Content" Source="warp.png" Description="Copied XNA Game Studio Content Project content to backup location.">
+</Event><Event ErrorLevel="0" Project="Content" Source="dsprojectinfo" Description="Copied XNA Game Studio Content Project content to backup location.">
+</Event><Event ErrorLevel="0" Project="Content" Source="BodyColour.tga" Description="Copied XNA Game Studio Content Project content to backup location.">
+</Event><Event ErrorLevel="0" Project="Content" Source="faceColour.tga" Description="Copied XNA Game Studio Content Project content to backup location.">
+</Event><Event ErrorLevel="0" Project="Content" Source="Content.contentproj" Description="Copied XNA Game Studio Content Project content to backup location.">
+</Event><Event ErrorLevel="0" Project="Content" Source="Content.contentproj.user" Description="Copied XNA Game Studio Content Project content to backup location.">
+</Event></UpgradeLog>
